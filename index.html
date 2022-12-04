@@ -2,44 +2,186 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Moon Ants</title>
+  <title>Moon Ants| Crazy Games</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      text-align: center;
+      font-family: "Nunito", sans-serif;
+      font-weight: 500;
+    }
+    .info {
+      display: inline-block;
+      width: 922px;
+    }
+    #info-header {
+      display: flex;
+      background-color: rgb(235, 235, 235);
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      user-select: none;
+    }
+    #info-content {
+      text-align: left;
+    }
+    a {
+      text-decoration: none;
+      color: #6842ff;
+    }
+  </style>
 </head>
 
-<body style="margin: 0px; overflow: hidden;" oncontextmenu="return false;">
-  <canvas id="unity-canvas"
-    style="position: fixed; width: 100%; height: 100%; background: #231F20">
-  </canvas>
-
-  <div id="progress-bar" style="position: absolute; left: 0%; right: 100%; top: 49%; bottom: 49%; background-color: white;"></div>
-
-  <script src="Build/MoonAntVK.loader.js"></script>
-  <script>
-    const settings = {
-      dataUrl: "Build/409fefa3ad853e57abfdf82a5b03dc18.data.unityweb",
-      frameworkUrl: "Build/5060e003679c14483bee84f5782eb24b.js.unityweb",
-      codeUrl: "Build/b064d91e36a61c5ef696fd286eea9f7b.wasm.unityweb",
-      streamingAssetsUrl: "StreamingAssets",
-      companyName: "DefaultCompany",
-      productName: "Moon Ants",
-      productVersion: "0.1",
-      matchWebGLToCanvasSize: true,
-      // devicePixelRatio: 2, // Uncomment this line to enable anti-aliasing
+<body>
+  <script type="text/javascript">
+    var slugify = (text) => {
+      return (text || '')
+        .replace(/&/g, ' and ')
+        .replace(/[^a-zA-Z0-9]/g, ' ')
+        .trim()
+        .replace(/\s+/g, '-')
+        .toLowerCase();
+    }
+    var options = {
+      author: "Unity Developer",
+      gameName: "Moon Ants",
+      gameSlug: slugify("Moon Ants"),
+      gameLink: "https://www.crazygames.com/game/your-game-here",
+      allowFullscreen: true,
+      locale: "en_US",
+      loader: "unity2020",
+      loaderOptions: {
+        unityLoaderUrl: "Build/MoonAnt.loader.js",
+        unityConfigOptions: {
+          "dataUrl": "Build/aaeba35216e1e501e5d2f1bb1eac3cd2.data.br",
+          "frameworkUrl": "Build/b6c624fba6728620339fed39fe7b7a30.js.br",
+          "codeUrl": "Build/65610958f5ff245e3e49774bb70a98f9.wasm.br",
+          "streamingAssetsUrl": "StreamingAssets",
+        }
+      },
+      category: "UnitySDK",
+      categoryLink: "https://www.crazygames.com",
+      thumbnail: "https://images.crazygames.com/upcoming.png",
+      gameStatus: "published",
+      dollarRate: 1,
+      sdkDebug: true,
+      gameLink: 'https://www.crazygames.com/testgame',
+      forceTestAds: true,
     };
 
-    const progressBar = document.querySelector("#progress-bar");
+    window.CrazyGames = {};
+    window.CrazyGames.options = options;
+  </script>
+  <iframe id="unity" allow="autoplay; fullscreen" style="width: 922px; height: 532px;"></iframe>
+  <script type="text/javascript">
+    var iframe = document.getElementById('unity');
+    iframe.setAttribute('src', 'template.html' + window.location.search);
+  </script>
 
-    setTimeout(() => {
-      createUnityInstance(document.querySelector("#unity-canvas"), settings, (progress) => {
-        progressBar.style.right = 100 * (1 - progress) + "%";
-      }).then(() => {
-        progressBar.style.display = "none";
-      }).catch((message) => {
-        alert(message);
-      });
-    }, 500); // Wait half a second before loading. Makes page more responsive on reload.
+  <div class="info">
+    <div id="info-header">
+      <div style="flex: 1; text-align: left">Useful information</div>
+      <div>V</div>
+    </div>
+    <div id="info-content">
+      <ul>
+        <li>
+          You can submit your game here
+          <a href="https://developer.crazygames.com/submit" target="_blank"
+            >https://developer.crazygames.com/submit</a
+          >
+        </li>
+        <li>
+          There is no need to upload this template file. You only need to
+          upload the "Build" folder, and "StreamingAssets" if you have one.
+        </li>
+        <li>
+          Have you optimized your build size as much as possible? A smaller
+          build results in a higher load rate, which in turn increases your
+          income. The
+          <b>WebGL optimizer</b> that comes with the SDK may help you do this,
+          and you can access it in Unity under this menu option
+          <i>CrazyGames > WebGL Optimizer</i>. Alternatively, you can check
+          these
+          <a
+            href="https://docs.crazygames.com/other/unity-export-tips/"
+            target="_blank"
+            >export tips</a
+          >.
+        </li>
+        <li>
+          Outside of CrazyGames the SDK will run in demo mode, you'll see demo
+          ads and dummy data. In order to run your game in Crazygames-like
+          conditions, you can submit your game or use our
+          <a href="https://developer.crazygames.com/qatool" target="_blank"
+            >QA Tool</a
+          >
+          to test it.
+        </li>
+        <li>
+          If you wish to upload the game on your domain, don't forget to
+          whitelist it in the CrazySDK settings, otherwise, the sitelock will
+          block it and the game won't start. CrazySDK will not be active on
+          your domain, and calls to it will do nothing.
+        </li>
+        <li>
+          Other useful links:
+          <ul>
+            <li>
+              <a
+                href="https://developer.crazygames.com/qatool"
+                target="_blank"
+                >QA Tool</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://docs.crazygames.com/sdk/unity/"
+                target="_blank"
+                >SDK docs</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://docs.crazygames.com/other/unity-optimizer/"
+                target="_blank"
+                >About WebGL optimizer</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://docs.crazygames.com/general/ads-guidelines/"
+                target="_blank"
+                >Ads guidelines</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://docs.crazygames.com/general/quality-guidelines/"
+                target="_blank"
+                >Quality guidelines</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    document.querySelector("#info-content").style.display = "none";
+    document.querySelector("#info-header").addEventListener("click", () => {
+      const infoContent = document.querySelector("#info-content");
+      infoContent.style.display =
+        infoContent.style.display === "none" ? "block" : "none";
+    });
   </script>
 </body>
-
-</html>
