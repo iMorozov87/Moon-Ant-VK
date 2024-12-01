@@ -1,149 +1,122 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Moon Ants</title>
-
-  <script type="text/javascript" >
-    window.yandexMetricaCounterId = parseInt(91336118);
-  </script>
-
-  <!-- Yandex.Metrika counter -->
-  <script type="text/javascript" >
-    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-    m[i].l=1*new Date();
-    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-    ym(window.yandexMetricaCounterId, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true
-    });
-  </script>
-  <noscript><div><img src="https://mc.yandex.ru/watch/91336118" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-  <!-- /Yandex.Metrika counter -->
-
-  <script type="text/javascript" >
-    ym(window.yandexMetricaCounterId,'reachGoal','pageOpen');
-
-    addEventListener('DOMContentLoaded', (event) => {
-      const pageLoadTime = performance.timing.domContentLoadedEventStart - performance.timing.navigationStart;
-      ym(window.yandexMetricaCounterId,'reachGoal','pageLoad', { pageLoadTime: pageLoadTime / 1000 });
-    });
-  </script>
-</head>
-
-<body style="margin: 0px; overflow: hidden;" oncontextmenu="return false;">
-    <!--Фон должен лежать в папке Build с названием Background.gif-->
-    <canvas id="unity-canvas"
-            style="position: fixed; width: 100%; height: 100%;">
-    </canvas>
-    <!--Контейнер, в котором контейнер, в котором прогресс бар, в котором текст-->
-    <div id="container" style="display: flex; justify-content: center; align-items: center; height: 100vh; width: 100%;">
-        <div id="progress-bar__container" style="width: 50%; height: 2rem; border-radius: 2rem; background-color: white; bottom: -30%; position: relative; overflow: hidden; transition: all 0.5s; will-change: transform; box-shadow: 0 0 5px #e76f51;">
-            <div id="progress-bar" style="position: absolute; height: 100%; width: 100%; background-color: rgb(255, 48, 18); top: 0px; bottom: 0px; left: -100%; border-radius: inherit; display: initial; justify-content: center; align-items: center; color: white; font-family: sans-serif; z-index: 1;"></div>
-            <span id="progress-bar__text" style="display: block; font-family: cursive; color: black; text-align: center; top: 10%; position: absolute; height: 100%; width: 100%; z-index: 2;"></span>
-            <span id="progress-bar__finish-text" style="display: none; font-family: cursive; color: black; text-align: center; top: 10%; position: absolute; height: 100%; width: 100%; z-index: 2;"></span>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | MineDrawler</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+  </head>
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
         </div>
+      </div>
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">MineDrawler</div>
+      </div>
     </div>
-
-    <script src="Build/MoonAntVK.loader.js"></script>
     <script>
-    const settings = {
-      dataUrl: "Build/7ae913da5c34bc3804c01e4c5d827e54.data.unityweb",
-      frameworkUrl: "Build/ea8e072124bcc61919ef060fdcd0e440.js.unityweb",
-      codeUrl: "Build/87ea43054b348a426f31ae668d2e394a.wasm.unityweb",
-      streamingAssetsUrl: "StreamingAssets",
-      companyName: "DefaultCompany",
-      productName: "Moon Ants",
-      productVersion: "0.1",
-      matchWebGLToCanvasSize: true,
-      devicePixelRatio: 1.25,
-    };
-        //Аля словарь, украдено из общего чата
-        const progressBarTipsArray = [
-            {
-                'ru': ' ',
-                'en': ' ',
-                'tr': ' '
-            },
-            {
-                'ru': ' ',
-                'en': ' ',
-                'tr': ' '
-            }];
 
-        const getLangParam = () => {
-          let lang = (new URLSearchParams(window.location.search)).get('lang');
-          
-          if (!lang) {
-            const countryCode = location.host.replace(/^.*\./,"");
-            switch (countryCode) {
-              case 'ru':
-                lang = 'ru';
-                break;
-              case 'com':
-                lang = 'en';
-                break;
-              case 'tr':
-                lang = 'tr';
-                break;
-            }
-          }
-          lang = ['ru', 'en', 'tr'].includes(lang) ? lang : 'ru';
-          return lang;
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
         }
-        
-        const progressBarTipTextLanguage = getLangParam();
-
-        const canvas = document.querySelector("#unity-canvas");
-        const progressBar = document.querySelector("#progress-bar");
-        const progressBarContainer = document.querySelector('#progress-bar__container');
-        const progressBarText = document.querySelector('#progress-bar__text');
-        const progressBarFinishText = document.querySelector('#progress-bar__finish-text');
-
-        if (/iPhone|iPad/i.test(navigator.userAgent)) {
-            canvas.style.background = "#9affff";
-        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
         else {
-            canvas.style.backgroundImage = "url('TemplateAssets/Background.gif')";
-            canvas.style.backgroundPosition = "center";
-            canvas.style.backgroundSize = "cover";
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
         }
+        updateBannerVisibility();
+      }
 
-    const unityStartLoadingTime = performance.now();
-    let unityEndLoadingTime = 0;
-    setTimeout(() => {
-        createUnityInstance(document.querySelector("#unity-canvas"), settings, (progress) => {
-          //шайтан цифры для красивого отображения
-            progressBar.style.left = (100 * (progress) - 100) + 11 * progress + "%";
-            progressBarText.textContent = progressBarTipsArray[0][progressBarTipTextLanguage];
-            progressBar.backgroundColor = '#4895ef';
-            if (progress * 100 > 85) {
-                progressBarFinishText.textContent = progressBarTipsArray[1][progressBarTipTextLanguage];
-                progressBarFinishText.style.display = "initial";
-                progressBarText.style.display = "none"
-          }
-      }).then((unityInstance) => {
-          progressBarContainer.style.display = "none";
-		  canvas.style.backgroundImage = "none";
-        unityEndLoadingTime = performance.now();
-        unityInstance.Module.errorHandler = (errorMessage) => {
-          const unityCrashTime = performance.now();
-          const unityCrashPlaytime = unityEndLoadingTime === 0 ? 0 : (unityCrashTime - unityEndLoadingTime) / 1000;
-          ym(window.yandexMetricaCounterId, 'reachGoal', 'unityGameCrash', { unityCrashPlaytime: unityCrashPlaytime });
-        };
-        ym(window.yandexMetricaCounterId,'reachGoal','unityStart', { unityLoadTime: (unityEndLoadingTime - unityStartLoadingTime) / 1000 });
-      }).catch((errorMessage) => {
-        ym(window.yandexMetricaCounterId, 'reachGoal', 'unityLoadingCrash');
-        alert(errorMessage);
-      });
-    }, 500); // Wait half a second before loading. Makes page more responsive on reload.
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/MineDrawWebGL3.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/11f0b16975d2c82e8adc24bfc2c100e8.data",
+        frameworkUrl: buildUrl + "/9bcf60b382bab3e42f4a103975ee2087.js",
+        codeUrl: buildUrl + "/573b7b6cf5203ad6c7727b1c1b9501e3.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "MineDrawler",
+        productVersion: "0.1",
+        showBanner: unityShowBanner,
+      };
+
+      // By default, Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        container.className = "unity-mobile";
+        canvas.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+
+      } else {
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
+      }
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+              }).then((unityInstance) => {
+                loadingBar.style.display = "none";
+                fullscreenButton.onclick = () => {
+                  unityInstance.SetFullscreen(1);
+                };
+              }).catch((message) => {
+                alert(message);
+              });
+            };
+
+      document.body.appendChild(script);
+
     </script>
-</body>
-
+  </body>
 </html>
